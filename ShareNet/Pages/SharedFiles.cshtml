@@ -1,0 +1,13 @@
+﻿@page
+@model ShareNet.Pages.SharedFilesModel
+
+@{
+}
+
+<h3 class="text-center">udostępniony plik: @Model.SharedFile.FileName (@Model.GetSize(Model.SharedFile.Size)) Możesz pobrać go za pomocą przycisku poniżej</h3>
+<div class="d-flex align-items-center justify-content-center">
+    <form asp-page-handler="DownloadsharedFile" method="post">
+        <input type="hidden" name="FileId" value="@Model.id" />
+        <button class="btn btn-primary">Pobierz</button>
+    </form>
+</div>

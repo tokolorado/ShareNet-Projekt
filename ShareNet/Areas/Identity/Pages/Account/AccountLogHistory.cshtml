@@ -1,0 +1,33 @@
+﻿@page
+@model ShareNet.Areas.Identity.Pages.Account.AccountLogHistoryModel
+@{
+    ViewData["Title"] = "Historia Konta";
+}
+
+<h1>Historia logów</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">Czas</th>
+            <th class="text-center">Tekst wiadomości</th>
+        </tr>
+    </thead>
+    <tbody>
+         @foreach (ShareNet.Models.ShareNetLog item in Model.Logi)
+            {
+                <tr>
+                    <td class="text-center">
+                        <div class="d-inline-flex p-3">
+                            <div>@item.LogTime</div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-inline-flex p-3">
+                            <div>@item.Logtext</div>
+                        </div>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+

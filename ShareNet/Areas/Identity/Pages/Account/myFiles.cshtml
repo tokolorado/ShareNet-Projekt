@@ -1,0 +1,94 @@
+﻿
+@page
+@model ShareNet.Areas.Identity.Pages.Account.myFilesModel
+@{
+    ViewData["Title"] = "Twoje Pliki";
+}
+
+<h1>Moje Pliki</h1>
+
+
+<div class="mb-3 mt-3">
+    <form method="post" asp-page-handler="UploadFile" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Wyślij Plik (Max 500MB)</label>
+            <input type="file" name="formFile" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Wyślij</button>
+    </form>
+
+</div>
+
+
+<table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">Udostępniony</th>
+                <th class="text-center">Nazwa</th>
+                <th class="text-center">Rozmiar</th>
+                <th class="text-center">Akcje</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ShareNet.Models.File item in Model.Files)
+            {
+                <tr>
+                    <td class="text-center">
+                    @if (item.isShared)
+                    {
+                        <div class="d-inline-flex p-3">
+                            <div>@Model._baseLink@item.Id</div>
+                        </div>
+                    }
+                </td>
+                    <td class ="text-center">
+                    <p class="p-2">@item.FileName</p>
+                    </td>
+                    <td class="text-center">
+                        <p class="p-2">@Model.GetSize(item.Size)</p>
+                    </td>
+                    <td class="text-center">
+
+                    <div class="d-inline-flex">
+                        <div class="d-inline-flex p-2">
+                                    <form asp-page-handler="DownloadFun" method="post">
+                                        <input type="hidden" name="FileId" value="@item.Id" />
+                                        <button class="btn btn-primary">Pobierz</button>
+                                    </form>
+                                </div>
+                        @if (!item.isShared)
+                        {
+                            <div class="d-inline-flex p-2">
+                                <form asp-page-handler="ShareFun" method="post" onclick="return confirm('Jesteś pewny, że chcesz udostępnić plik: @item.FileName ?')">
+                                    <input type="hidden" name="FileId" value="@item.Id" />
+                                    <button class="btn btn-primary">Udostępnij</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-inline-flex p-2">
+                                <form asp-page-handler="ShareFunStop" method="post" onclick="return confirm('Jesteś pewny, że chcesz zatrzymać udostępnianie pliku: @item.FileName ?')">
+                                    <input type="hidden" name="FileId" value="@item.Id" />
+                                    <button class="btn btn-danger">Zatrzymaj Udostępnianie</button>
+                                </form>
+                            </div>
+                        }
+
+                        <div class="d-inline-flex p-2">
+                            <form asp-page-handler="DeleteFun" method="post" onclick="return confirm('Jesteś pewny, że chcesz usunąć plik: @item.FileName ?')">
+                                        <input type="hidden" name="FileId" value="@item.Id" />
+                                        <button class="btn btn-primary">Usuń</button>
+                                    </form>
+                                </div>
+                            </div>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+
